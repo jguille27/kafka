@@ -1,4 +1,4 @@
-package com.prueba.pedidos.entity;
+package com.prueba.consumer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orders_id")
-    private int orderId;
+    private int orderId = 0;
 
     @ManyToOne
     @JoinColumn(name = "client_id")

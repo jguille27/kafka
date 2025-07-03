@@ -1,4 +1,4 @@
-package com.prueba.pedidos.entity;
+package com.prueba.consumer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

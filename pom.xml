@@ -11,13 +11,18 @@
 	<groupId>com.prueba</groupId>
 	<artifactId>pedidos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pedidos</name>
+    <packaging>pom</packaging>
+    <name>pedidos</name>
 	<description>Pedidos</description>
 	<url/>
-	<properties>
+    <modules>
+        <module>productor</module>
+		<module>consumer</module>
+	</modules>
+    <properties>
 		<java.version>17</java.version>
 	</properties>
-	<dependencies>
+	<!--dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -54,7 +59,7 @@
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+	</dependencies-->
 
 	<build>
 		<plugins>

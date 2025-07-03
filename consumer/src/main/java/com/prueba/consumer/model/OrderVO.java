@@ -1,4 +1,4 @@
-package com.prueba.pedidos.model;
+package com.prueba.consumer.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -8,20 +8,20 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class PedidoVO {
+public class OrderVO {
 
     @JsonProperty("orderId")
-    private String orderId;
+    private Integer orderId;
 
     @JsonProperty("customerId")
-    private String customerId;
+    private Integer customerId;
     private List<Item> items = new ArrayList<>();
 
     @Getter
     @Setter
     @ToString
-    class Item {
-        String productId;
-        int quantity;
+    public class Item {
+        private String productId;
+        private int quantity;
     }
 }
