@@ -40,7 +40,7 @@ public class KafkaService {
             List<Product> products = new ArrayList<>();
             boolean productNotFound = false;
             Orders order = ordersRepository.findById(orderVO.getOrderId()).orElse(new Orders());
-            if (order.getOrderId() != 0) {
+            if (order.getOrderId()!=null) {
                 LOGGER.warn("{} Order {} already exists", LogHead, orderVO.getOrderId());
                 errorProducer.sendRequestToTopic(orderJson + ": OrderId " + orderVO.getOrderId() + " already exists");
             } else {
@@ -62,7 +62,8 @@ public class KafkaService {
                     if (!productNotFound) {
                         order.setOrderId(orderVO.getOrderId());
                         order.setClientId(client);
-                        order.setProducts(products);
+                        //order.setProducts(products);
+                        //products.forEach(p -> order.getProducts().add(p));
                         ordersRepository.save(order);
                     }
                 }

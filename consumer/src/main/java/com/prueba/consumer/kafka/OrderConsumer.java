@@ -32,7 +32,7 @@ public class OrderConsumer {
             autoStartup = "#{'${kafka.consumer.autoStartup}'}"
     )
     public void processJson(String orderJson){
-        final String LogHead = "procesarPedido:";
+        final String LogHead = "processJson:";
         Gson gson = new Gson();
         OrderVO orderVO = null;
         try {

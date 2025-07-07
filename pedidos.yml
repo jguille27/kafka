@@ -1,0 +1,27 @@
+version: '2'
+services:
+  clientespringboot:
+    image: cliente-spring-boot
+    container_name: OrdersConsumer
+    depends_on:
+      - mysqldb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldbCliente:3306/microservicios?useUnicode=true&characterEncoding=utf8&useSSL=false
+      - SPRING_DATASOURCE_PASSWORD=microservicios
+    ports:
+      - 8090:8080
+
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysqldbCliente
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=microservicios
+      - MYSQL_DATABASE=microservicios
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=microservicios
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:

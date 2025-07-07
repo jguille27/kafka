@@ -3,8 +3,8 @@ package com.prueba.consumer.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -12,7 +12,6 @@ import java.util.List;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "client_id")
     private int clientId;
 
@@ -20,5 +19,5 @@ public class Client {
     private String clientName;
 
     @OneToMany(mappedBy = "clientId")
-    private List<Orders> orders = new ArrayList<>();
+    private Set<Orders> orders = new HashSet<>();
 }
