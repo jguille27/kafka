@@ -2,10 +2,10 @@ package com.prueba.consumer.service;
 
 import com.prueba.consumer.entity.*;
 import com.prueba.consumer.kafka.ErrorProducer;
-import com.prueba.consumer.kafka.OrderConsumer;
 import com.prueba.consumer.model.Item;
 import com.prueba.consumer.model.OrderVO;
 import com.prueba.consumer.repository.ClientRepository;
+import com.prueba.consumer.repository.OrderProductRepository;
 import com.prueba.consumer.repository.OrdersRepository;
 import com.prueba.consumer.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -25,13 +25,15 @@ public class KafkaService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final ErrorProducer errorProducer;
+    private final OrderProductRepository orderProductRepository;
 
     @Autowired
-    public KafkaService(ClientRepository clientRepository, ErrorProducer errorProducer, ProductRepository productRepository, OrdersRepository ordersRepository) {
+    public KafkaService(ClientRepository clientRepository, ErrorProducer errorProducer, ProductRepository productRepository, OrdersRepository ordersRepository, OrderProductRepository orderProductRepository) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
         this.ordersRepository = ordersRepository;
         this.errorProducer = errorProducer;
+        this.orderProductRepository = orderProductRepository;
     }
 
     @Transactional
@@ -52,15 +54,8 @@ public class KafkaService {
                 } else {
                     for (Item item : orderVO.getItems()) {
                         Product product = productRepository.findById(item.getProductId()).orElse(null);
-                        /*OrderProductId orderProductId = new OrderProductId( orderVO.getOrderId(),item.getProductId());
-                        OrderProduct orderProduct = new OrderProduct();
-                        orderProduct.setQuantity(item.getQuantity());
-                        orderProduct.setId(orderProductId);
-                        orderProduct.setProduct(product);
-                        orderProduct.setOrder(order);*/
                         if (product != null)
                             products.put(product, item.getQuantity());
-                            //order.getOrderProducts().add(orderProduct);
                         else {
                             productNotFound = true;
                             LOGGER.warn("{} Item: " + item.getProductId() + "] not found", LogHead);
@@ -70,6 +65,7 @@ public class KafkaService {
                     if (!productNotFound) {
                         order.setOrderId(orderVO.getOrderId());
                         order.setClient(client);
+                        ordersRepository.save(order);
                         for (Product product : products.keySet()){
                             OrderProductId orderProductId = new OrderProductId();
                             orderProductId.setOrderId(orderVO.getOrderId());
@@ -79,20 +75,8 @@ public class KafkaService {
                             orderProduct.setId(orderProductId);
                             orderProduct.setProduct(product);
                             orderProduct.setOrder(order);
-                            order.getOrderProducts().add(orderProduct);
-                            //order.getOrderProducts().add(orderProduct);
+                            orderProductRepository.save(orderProduct);
                         }
-                        ordersRepository.save(order);
-
-                        //order.setOrderProducts(products);
-                        //order.setProducts(products);
-                        //products.forEach(p -> order.getProducts().add(p));
-                        //ordersRepository.save(order);
-                        //for(OrderProduct orderProduct : products){
-                        //    orderProduct.setOrder(order);
-                        //    order.getOrderProducts().add(orderProduct);
-                        //}
-                        ordersRepository.save(order);
                     }
                 }
             }

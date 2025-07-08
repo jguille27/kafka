@@ -1,0 +1,21 @@
+INSERT INTO client(client_id, client_name) SELECT '1', 'Cliente 1' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '1' AND client_name = 'Cliente 1');
+INSERT INTO client(client_id, client_name) SELECT '2', 'Cliente 2' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '2' AND client_name = 'Cliente 2');
+INSERT INTO client(client_id, client_name) SELECT '3', 'Cliente 3' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '3' AND client_name = 'Cliente 3');
+INSERT INTO client(client_id, client_name) SELECT '4', 'Cliente 4' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '4' AND client_name = 'Cliente 4');
+INSERT INTO client(client_id, client_name) SELECT '5', 'Cliente 5' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '5' AND client_name = 'Cliente 5');
+INSERT INTO client(client_id, client_name) SELECT '6', 'Cliente 6' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '6' AND client_name = 'Cliente 6');
+INSERT INTO client(client_id, client_name) SELECT '7', 'Cliente 7' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '7' AND client_name = 'Cliente 7');
+INSERT INTO client(client_id, client_name) SELECT '8', 'Cliente 8' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '8' AND client_name = 'Cliente 8');
+INSERT INTO client(client_id, client_name) SELECT '9', 'Cliente 9' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '9' AND client_name = 'Cliente 9');
+INSERT INTO client(client_id, client_name) SELECT '10', 'Cliente 10' WHERE NOT EXISTS (SELECT 1 FROM client WHERE client_id = '10' AND client_name = 'Cliente 10');
+
+INSERT INTO product(product_id, product_name) SELECT 'P001', 'Producto 1' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P001' AND product_name = 'Producto 1');
+INSERT INTO product(product_id, product_name) SELECT 'P002', 'Producto 2' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P002' AND product_name = 'Producto 2');
+INSERT INTO product(product_id, product_name) SELECT 'P003', 'Producto 3' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P003' AND product_name = 'Producto 3');
+INSERT INTO product(product_id, product_name) SELECT 'P004', 'Producto 4' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P004' AND product_name = 'Producto 4');
+INSERT INTO product(product_id, product_name) SELECT 'P005', 'Producto 5' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P005' AND product_name = 'Producto 5');
+INSERT INTO product(product_id, product_name) SELECT 'P006', 'Producto 6' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P006' AND product_name = 'Producto 6');
+INSERT INTO product(product_id, product_name) SELECT 'P007', 'Producto 7' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P007' AND product_name = 'Producto 7');
+INSERT INTO product(product_id, product_name) SELECT 'P008', 'Producto 8' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P008' AND product_name = 'Producto 8');
+INSERT INTO product(product_id, product_name) SELECT 'P009', 'Producto 9' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P009' AND product_name = 'Producto 9');
+INSERT INTO product(product_id, product_name) SELECT 'P010', 'Producto 10' WHERE NOT EXISTS (SELECT 1 FROM product WHERE product_id = 'P010' AND product_name = 'Producto 10');

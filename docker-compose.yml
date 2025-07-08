@@ -1,8 +1,17 @@
 version: '3.8'
 services:
+  kafka:
+      image: apache/kafka:latest
+      container_name: cityKafka
+      ports:
+        - "9092:9092"
+      environment:
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+        KAFKA_LISTENERS: PLAINTEXT://:9092
+
   mysql:
     image: mysql:8.0
-    container_name: mysqldbCliente
+    container_name: cityMysqldb
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: pass
@@ -10,10 +19,11 @@ services:
       MYSQL_USER: citydb
       MYSQL_PASSWORD: pass
     volumes:
-      - mysq_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
 
   consumer:
       build: ./consumer
+      container_name: cityConsumer
       ports:
         - "8090:8090"
       environment:
@@ -22,13 +32,15 @@ services:
         SPRING_DATASOURCE_PASSWORD: pass
       depends_on:
         - mysql
+        - kafka
 
   producer:
       build: ./productor
+      container_name: cityProductor
       ports:
         - "8080:8080"
       depends_on:
-        - mysql
+        - kafka
 
 volumes:
   mysql_data:
