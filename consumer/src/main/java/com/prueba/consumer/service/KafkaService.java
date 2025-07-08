@@ -20,6 +20,7 @@ import java.util.*;
 public class KafkaService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaService.class);
+    private static final String LOG_PREFIX = "KafkaService::";
 
     private final ClientRepository clientRepository;
     private final ProductRepository productRepository;
@@ -38,7 +39,8 @@ public class KafkaService {
 
     @Transactional
     public void processRequest(OrderVO orderVO, String orderJson) {
-        final String LogHead = "processRequest:";
+        final String LogHead = LOG_PREFIX + "processRequest:";
+        LOGGER.info("{} json: {}",LogHead, orderJson);
         if (isValidOrder(orderVO, orderJson)) {
             Map<Product,Integer> products = new HashMap<>();
             boolean productNotFound = false;
@@ -77,6 +79,9 @@ public class KafkaService {
                             orderProduct.setOrder(order);
                             orderProductRepository.save(orderProduct);
                         }
+                        LOGGER.warn("{}order saved",LogHead);
+                    } else {
+                        LOGGER.warn("{}productNotFound: not all the products were found",LogHead);
                     }
                 }
             }
