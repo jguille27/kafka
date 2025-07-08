@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("pedidos")
 public class ProductorController {
@@ -30,7 +28,7 @@ public class ProductorController {
     @PostMapping("/orders")
     public void registerOrder(HttpServletRequest servletRequest, @RequestBody String order){
         LOGGER.info("{} New request: {}",servletRequest.getRequestURL(),order);
-        LOGGER.info("{} Kafka servers from controller: {}",servletRequest.getRequestURL(),kafkaProperties.getBootstrapServers().stream().collect(Collectors.joining(", ")));
+        LOGGER.info("{} Kafka servers from controller: {}",servletRequest.getRequestURL(), String.join(", ", kafkaProperties.getBootstrapServers()));
         kafkaProducer.sendRequestToTopic(order);
     }
 }

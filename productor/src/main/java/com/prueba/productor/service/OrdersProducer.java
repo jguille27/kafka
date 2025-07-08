@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @Service
 public class OrdersProducer {
 
@@ -26,7 +24,7 @@ public class OrdersProducer {
     }
 
     public void sendRequestToTopic(String request){
-        LOGGER.info("Bootstrap Servers: {}", kafkaProperties.getBootstrapServers().stream().collect(Collectors.joining(", ")));
+        LOGGER.info("Bootstrap Servers: {}", String.join(", ", kafkaProperties.getBootstrapServers()));
         kafkaTemplate.send(producerTopic, request);
     }
 }

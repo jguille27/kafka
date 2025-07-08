@@ -1,7 +1,6 @@
 package com.prueba.consumer.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,10 +23,4 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderProduct> orderProducts = new HashSet<>();
-
-/*    @ManyToMany
-    @JoinTable(name = "order_product",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private Set<Orders> orders = new HashSet<>();*/
 }

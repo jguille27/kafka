@@ -60,7 +60,7 @@ public class KafkaService {
                             products.put(product, item.getQuantity());
                         else {
                             productNotFound = true;
-                            LOGGER.warn("{} Item: " + item.getProductId() + "] not found", LogHead);
+                            LOGGER.warn("{} Item: {}] not found", LogHead, item.getProductId());
                             errorProducer.sendRequestToTopic(orderJson + ": Item " + item.getProductId() + " not found");
                         }
                     }

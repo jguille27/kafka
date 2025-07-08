@@ -2,7 +2,6 @@ package com.prueba.consumer.kafka;
 
 import com.google.gson.Gson;
 import com.prueba.consumer.model.OrderVO;
-import com.prueba.consumer.repository.ClientRepository;
 import com.prueba.consumer.service.KafkaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +15,10 @@ public class OrderConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderConsumer.class);
 
     private final KafkaService kafkaService;
-    private final ClientRepository clientRepository;
 
     @Autowired
-    public OrderConsumer(KafkaService kafkaService, ClientRepository clientRepository) {
+    public OrderConsumer(KafkaService kafkaService) {
         this.kafkaService = kafkaService;
-        this.clientRepository = clientRepository;
     }
 
     @KafkaListener(
@@ -32,17 +29,13 @@ public class OrderConsumer {
             autoStartup = "#{'${kafka.consumer.autoStartup}'}"
     )
     public void processJson(String orderJson){
-        final String LogHead = "processJson:";
         Gson gson = new Gson();
-        OrderVO orderVO = null;
+        OrderVO orderVO;
         try {
             orderVO = gson.fromJson(orderJson, OrderVO.class);
             kafkaService.processRequest(orderVO, orderJson);
         }catch (Exception e){
-            e.printStackTrace();
+            LOGGER.info("Exception: ",e);
         }
     }
 }
-
-
-// {"orderId":"1","customerId":"1","items":[{"productId":"P001","quantity":2}]}

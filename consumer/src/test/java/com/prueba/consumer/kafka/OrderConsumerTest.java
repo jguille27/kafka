@@ -1,7 +1,6 @@
 package com.prueba.consumer.kafka;
 
 import com.prueba.consumer.model.OrderVO;
-import com.prueba.consumer.repository.ClientRepository;
 import com.prueba.consumer.service.KafkaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,14 +10,12 @@ import static org.mockito.Mockito.*;
 class OrderConsumerTest {
 
     private KafkaService kafkaService;
-    private ClientRepository clientRepository;
     private OrderConsumer orderConsumer;
 
     @BeforeEach
     void setUp() {
         kafkaService = mock(KafkaService.class);
-        clientRepository = mock(ClientRepository.class); // no se usa, pero se inyecta
-        orderConsumer = new OrderConsumer(kafkaService, clientRepository);
+        orderConsumer = new OrderConsumer(kafkaService);
     }
 
     @Test
