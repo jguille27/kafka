@@ -1,13 +1,17 @@
-package com.prueba.consumer.model;
+package com.prueba.consumer.entity;
 
-/*
-@Data
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 @Table(name = "order_product")
-@Embeddable*/
 public class OrderProduct {
 
-    /*@EmbeddedId
+    @EmbeddedId
     private OrderProductId id;
 
     @ManyToOne
@@ -21,5 +25,5 @@ public class OrderProduct {
     private Product product;
 
     @Column(name = "quantity")
-    private int quantity;*/
+    private Integer quantity;
 }

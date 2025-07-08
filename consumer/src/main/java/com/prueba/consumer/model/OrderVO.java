@@ -17,11 +17,4 @@ public class OrderVO {
     private Integer customerId;
     private List<Item> items = new ArrayList<>();
 
-    @Getter
-    @Setter
-    @ToString
-    public class Item {
-        private String productId;
-        private int quantity;
-    }
 }

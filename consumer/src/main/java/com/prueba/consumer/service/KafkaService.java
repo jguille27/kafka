@@ -1,20 +1,20 @@
 package com.prueba.consumer.service;
 
-import com.prueba.consumer.entity.Client;
-import com.prueba.consumer.entity.Orders;
-import com.prueba.consumer.entity.Product;
+import com.prueba.consumer.entity.*;
 import com.prueba.consumer.kafka.ErrorProducer;
+import com.prueba.consumer.kafka.OrderConsumer;
+import com.prueba.consumer.model.Item;
 import com.prueba.consumer.model.OrderVO;
 import com.prueba.consumer.repository.ClientRepository;
 import com.prueba.consumer.repository.OrdersRepository;
 import com.prueba.consumer.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class KafkaService {
@@ -34,10 +34,11 @@ public class KafkaService {
         this.errorProducer = errorProducer;
     }
 
+    @Transactional
     public void processRequest(OrderVO orderVO, String orderJson) {
         final String LogHead = "processRequest:";
         if (isValidOrder(orderVO, orderJson)) {
-            List<Product> products = new ArrayList<>();
+            Map<Product,Integer> products = new HashMap<>();
             boolean productNotFound = false;
             Orders order = ordersRepository.findById(orderVO.getOrderId()).orElse(new Orders());
             if (order.getOrderId()!=null) {
@@ -49,21 +50,48 @@ public class KafkaService {
                     LOGGER.warn("{} Client {} not found", LogHead, orderVO.getCustomerId());
                     errorProducer.sendRequestToTopic(orderJson + ": Client " + orderVO.getCustomerId() + " not found");
                 } else {
-                    for (OrderVO.Item i : orderVO.getItems()) {
-                        Product p = productRepository.findById(i.getProductId()).orElse(null);
-                        if (p != null)
-                            products.add(p);
+                    for (Item item : orderVO.getItems()) {
+                        Product product = productRepository.findById(item.getProductId()).orElse(null);
+                        /*OrderProductId orderProductId = new OrderProductId( orderVO.getOrderId(),item.getProductId());
+                        OrderProduct orderProduct = new OrderProduct();
+                        orderProduct.setQuantity(item.getQuantity());
+                        orderProduct.setId(orderProductId);
+                        orderProduct.setProduct(product);
+                        orderProduct.setOrder(order);*/
+                        if (product != null)
+                            products.put(product, item.getQuantity());
+                            //order.getOrderProducts().add(orderProduct);
                         else {
                             productNotFound = true;
-                            LOGGER.warn("{} Item: " + i.getProductId() + "] not found", LogHead);
-                            errorProducer.sendRequestToTopic(orderJson + ": Item " + i.getProductId() + " not found");
+                            LOGGER.warn("{} Item: " + item.getProductId() + "] not found", LogHead);
+                            errorProducer.sendRequestToTopic(orderJson + ": Item " + item.getProductId() + " not found");
                         }
                     }
                     if (!productNotFound) {
                         order.setOrderId(orderVO.getOrderId());
-                        order.setClientId(client);
+                        order.setClient(client);
+                        for (Product product : products.keySet()){
+                            OrderProductId orderProductId = new OrderProductId();
+                            orderProductId.setOrderId(orderVO.getOrderId());
+                            orderProductId.setProductId(product.getProductId());
+                            OrderProduct orderProduct = new OrderProduct();
+                            orderProduct.setQuantity(products.get(product));
+                            orderProduct.setId(orderProductId);
+                            orderProduct.setProduct(product);
+                            orderProduct.setOrder(order);
+                            order.getOrderProducts().add(orderProduct);
+                            //order.getOrderProducts().add(orderProduct);
+                        }
+                        ordersRepository.save(order);
+
+                        //order.setOrderProducts(products);
                         //order.setProducts(products);
                         //products.forEach(p -> order.getProducts().add(p));
+                        //ordersRepository.save(order);
+                        //for(OrderProduct orderProduct : products){
+                        //    orderProduct.setOrder(order);
+                        //    order.getOrderProducts().add(orderProduct);
+                        //}
                         ordersRepository.save(order);
                     }
                 }

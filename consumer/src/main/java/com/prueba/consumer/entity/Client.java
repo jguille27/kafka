@@ -2,12 +2,15 @@ package com.prueba.consumer.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Table(name = "client")
 public class Client {
 
@@ -18,6 +21,6 @@ public class Client {
     @Column(name = "client_name")
     private String clientName;
 
-    @OneToMany(mappedBy = "clientId")
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private Set<Orders> orders = new HashSet<>();
 }

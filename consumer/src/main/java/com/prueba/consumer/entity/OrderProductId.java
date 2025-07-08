@@ -1,11 +1,15 @@
-package com.prueba.consumer.model;
+package com.prueba.consumer.entity;
+
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
 import java.io.Serializable;
 
-/*@Getter
+@Getter
 @Setter
-@ToString
-@Embeddable*/
+@Embeddable
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderProductId implements Serializable {
     private Integer orderId;
     private String productId;

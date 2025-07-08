@@ -29,4 +29,4 @@ public class ProductorController {
     }
 }
 
-// curl --header "Content-Type: application/json" --request POST --data '{"orderId":"123","customerId":"C123","items":[{"productId":"P001","quantity":2}]}' http://localhost:8080/pedidos/orders
+// curl --header "Content-Type: application/json" --request POST --data '{"orderId":"123","customerId":"1","items":[{"productId":"P001","quantity":2}]}' http://localhost:8080/pedidos/orders

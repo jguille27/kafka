@@ -1,14 +1,17 @@
 package com.prueba.consumer.controller;
 
 import com.prueba.consumer.entity.Orders;
+import com.prueba.consumer.model.Item;
+import com.prueba.consumer.model.OrderVO;
 import com.prueba.consumer.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders")
@@ -22,8 +25,17 @@ public class OrdersController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Orders> getOrders(@RequestParam("orderId") int orderId){
-        Orders orders = ordersRepository.findById(orderId).orElse(new Orders());
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+    public ResponseEntity<OrderVO> getOrders(@PathVariable int orderId){
+        /*OrderVO orders = ordersRepository.getOrderById(orderId);
+        return new ResponseEntity<>(orders, HttpStatus.OK);*/
+        Orders orders = ordersRepository.findById(orderId).orElse(null);
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderId(orders.getOrderId());
+        orderVO.setCustomerId(orders.getClient().getClientId());
+        List<Item> items = orders.getOrderProducts().stream()
+                .map(o -> new Item(o.getProduct().getProductId(),o.getQuantity()))
+                        .collect(Collectors.toList());
+        orderVO.setItems(items);
+        return new ResponseEntity<>(orderVO, HttpStatus.OK);
     }
 }

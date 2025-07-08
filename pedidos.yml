@@ -1,27 +1,34 @@
-version: '2'
+version: '3.8'
 services:
-  clientespringboot:
-    image: cliente-spring-boot
-    container_name: OrdersConsumer
-    depends_on:
-      - mysqldb
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldbCliente:3306/microservicios?useUnicode=true&characterEncoding=utf8&useSSL=false
-      - SPRING_DATASOURCE_PASSWORD=microservicios
-    ports:
-      - 8090:8080
-
-  mysqldb:
-    image: mysql:5.7
+  mysql:
+    image: mysql:8.0
     container_name: mysqldbCliente
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=microservicios
-      - MYSQL_DATABASE=microservicios
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=microservicios
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: pedidos
+      MYSQL_USER: citydb
+      MYSQL_PASSWORD: pass
     volumes:
-      - db:/var/lib/mysql
+      - mysq_data:/var/lib/mysql
+
+  consumer:
+      build: ./consumer
+      ports:
+        - "8090:8090"
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/pedidos
+        SPRING_DATASOURCE_USERNAME: citydb
+        SPRING_DATASOURCE_PASSWORD: pass
+      depends_on:
+        - mysql
+
+  producer:
+      build: ./productor
+      ports:
+        - "8080:8080"
+      depends_on:
+        - mysql
 
 volumes:
-  db:
+  mysql_data:

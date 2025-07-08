@@ -1,16 +1,19 @@
 package com.prueba.consumer.entity;
 
-import com.prueba.consumer.model.OrderProduct;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Table(name = "product")
 public class Product {
+
 
     @Id
     @Column(name = "product_id")
@@ -19,12 +22,12 @@ public class Product {
     @Column(name = "product_name")
     private String productName;
 
-    /*@OneToMany(mappedBy = "product")
-    private Set<OrderProduct> orderProducts = new HashSet<>();*/
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<OrderProduct> orderProducts = new HashSet<>();
 
-    @ManyToMany
+/*    @ManyToMany
     @JoinTable(name = "order_product",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private Set<Orders> orders = new HashSet<>();
+    private Set<Orders> orders = new HashSet<>();*/
 }
